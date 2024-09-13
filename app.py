@@ -58,7 +58,7 @@ if st.sidebar.button('Predict Price'):
     predicted_price = model.predict(scaled_features)
 
     # Convert to lakhs (if the model outputs price in rupees)
-    predicted_price_in_lakhs = predicted_price[0] / 100000  # Assuming model predicts in rupees
+    predicted_price_in_lakhs = predicted_price[0] / 100000 # Assuming model predicts in rupees
 
     st.markdown(f"""
         <div style="background-color:#f0f2f6;padding:20px;border-radius:10px;margin-top:20px;">
@@ -66,7 +66,7 @@ if st.sidebar.button('Predict Price'):
             <p style="font-size:18px;text-align:center;">
                 Based on the details you provided, the <strong>estimated selling price</strong> of the car is:
             </p>
-            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:1f} lakhs</h2>
+            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:4f} lakhs</h2>
         </div>
     """, unsafe_allow_html=True)
 
