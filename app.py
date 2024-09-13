@@ -4,7 +4,7 @@ import numpy as np
 
 # Load the trained model and scaler
 model = pickle.load(open('model.pkl', 'rb'))
-scaler = pickle.load(open('lass.pkl', 'rb'))
+scaler = pickle.load(open('scaler.pkl', 'rb'))
 
 # App title and description with HTML
 st.set_page_config(page_title="Car Price Prediction App", page_icon="🚗", layout="centered")
@@ -12,7 +12,7 @@ st.markdown("""
     <div style="background-color:#4CAF50;padding:10px;border-radius:10px">
         <h1 style="color:white;text-align:center;">🚗 Car Price Prediction App</h1>
     </div>
-""", unsafe_allow_html=True )
+""", unsafe_allow_html=True)
 
 st.markdown("""
     <p style="font-size:18px;text-align:center;">
@@ -37,39 +37,31 @@ Seller_Type = st.sidebar.selectbox('Seller Type', ('Dealer', 'Individual'))
 Transmission = st.sidebar.selectbox('Transmission Type', ('Manual', 'Automatic'))
 Owner = st.sidebar.selectbox('Owner Type', ('First', 'Second', 'Third'))
 
-# Convert categorical input to match the encoded values
+# Process the categorical inputs to match the model training
 Fuel_Type_encoded = 0 if Fuel_Type == 'Petrol' else 1 if Fuel_Type == 'Diesel' else 2
 Seller_Type_encoded = 0 if Seller_Type == 'Dealer' else 1
 Transmission_encoded = 0 if Transmission == 'Manual' else 1
 Owner_encoded = 0 if Owner == 'First' else 1 if Owner == 'Second' else 2
 
-# Convert Year to car age
-car_age = 2024 - Year  # Calculate car age
+# Convert the year to the car's age (assuming the dataset was trained with car age instead of year)
+car_age = 2024 - Year  # Assuming the model was trained up to 2024
 
-# Create a feature vector (ensure the order of columns matches training data)
+# Create a feature vector (ensure the order of columns is correct based on training data)
 features = np.array([[car_age, Present_Price, Kms_Driven, Fuel_Type_encoded, Seller_Type_encoded, Transmission_encoded, Owner_encoded]])
 
-# Scale the features (ensure scaler was used during model training)
+# Scale the features (ensure scaler was used for the correct features during training)
 scaled_features = scaler.transform(features)
 
-# Predict the price and handle negative predictions
+# Predict the price and display the result with styled output
 if st.sidebar.button('Predict Price'):
     predicted_price = model.predict(scaled_features)
-
-    # Convert to lakhs (if the model outputs price in rupees)
-    predicted_price_in_lakhs = predicted_price[0] / 100000  # Assuming model predicts in rupees
-
-    # Handle negative predictions
-    if predicted_price_in_lakhs < 0:
-        predicted_price_in_lakhs = 0
-
     st.markdown(f"""
         <div style="background-color:#f0f2f6;padding:20px;border-radius:10px;margin-top:20px;">
             <h3 style="color:#4CAF50;text-align:center;">Prediction Result</h3>
             <p style="font-size:18px;text-align:center;">
                 Based on the details you provided, the <strong>estimated selling price</strong> of the car is:
             </p>
-            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:.2f} lakhs</h2>
+            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price[0]:.2f} lakhs</h2>
         </div>
     """, unsafe_allow_html=True)
 
@@ -103,4 +95,5 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
