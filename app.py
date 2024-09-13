@@ -3,9 +3,8 @@ import pickle
 import numpy as np
 
 # Load the trained model and scaler
-model = pickle.load(open(r'model.pkl', 'rb'))
-scaler = pickle.load(open(r'scaler.pkl', 'rb'))
-lass_reg_model = pickle.load(open(r'lass.pkl', 'rb'))
+model = pickle.load(open('model.pkl', 'rb'))
+scaler = pickle.load(open('scaler.pkl', 'rb'))
 
 # App title and description with HTML
 st.set_page_config(page_title="Car Price Prediction App", page_icon="🚗", layout="centered")
@@ -13,7 +12,7 @@ st.markdown("""
     <div style="background-color:#4CAF50;padding:10px;border-radius:10px">
         <h1 style="color:white;text-align:center;">🚗 Car Price Prediction App</h1>
     </div>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True )
 
 st.markdown("""
     <p style="font-size:18px;text-align:center;">
@@ -53,12 +52,16 @@ features = np.array([[car_age, Present_Price, Kms_Driven, Fuel_Type_encoded, Sel
 # Scale the features (ensure scaler was used during model training)
 scaled_features = scaler.transform(features)
 
-# Predict the price and display the result with styled output
+# Predict the price and handle negative predictions
 if st.sidebar.button('Predict Price'):
     predicted_price = model.predict(scaled_features)
 
     # Convert to lakhs (if the model outputs price in rupees)
-    predicted_price_in_lakhs = predicted_price[0] / 100000 # Assuming model predicts in rupees
+    predicted_price_in_lakhs = predicted_price[0] / 100000  # Assuming model predicts in rupees
+
+    # Handle negative predictions
+    if predicted_price_in_lakhs < 0:
+        predicted_price_in_lakhs = 0
 
     st.markdown(f"""
         <div style="background-color:#f0f2f6;padding:20px;border-radius:10px;margin-top:20px;">
@@ -66,7 +69,7 @@ if st.sidebar.button('Predict Price'):
             <p style="font-size:18px;text-align:center;">
                 Based on the details you provided, the <strong>estimated selling price</strong> of the car is:
             </p>
-            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:4f} lakhs</h2>
+            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:.2f} lakhs</h2>
         </div>
     """, unsafe_allow_html=True)
 
