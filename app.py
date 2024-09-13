@@ -55,13 +55,18 @@ scaled_features = scaler.transform(features)
 # Predict the price and display the result with styled output
 if st.sidebar.button('Predict Price'):
     predicted_price = model.predict(scaled_features)
+
+    # Convert to lakhs (if needed) based on model output
+    # If your model outputs price in rupees, convert it to lakhs
+    predicted_price_in_lakhs = predicted_price[0] / 100000  # Assuming model predicts in rupees
+
     st.markdown(f"""
         <div style="background-color:#f0f2f6;padding:20px;border-radius:10px;margin-top:20px;">
             <h3 style="color:#4CAF50;text-align:center;">Prediction Result</h3>
             <p style="font-size:18px;text-align:center;">
                 Based on the details you provided, the <strong>estimated selling price</strong> of the car is:
             </p>
-            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price[0]:.2f} lakhs</h2>
+            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:.2f} lakhs</h2>
         </div>
     """, unsafe_allow_html=True)
 
