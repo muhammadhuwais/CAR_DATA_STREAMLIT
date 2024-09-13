@@ -5,6 +5,7 @@ import numpy as np
 # Load the trained model and scaler
 model = pickle.load(open(r'model.pkl', 'rb'))
 scaler = pickle.load(open(r'scaler.pkl', 'rb'))
+lass_reg_model = pickle.load(open(r'lass.pkl', 'rb'))
 
 # App title and description with HTML
 st.set_page_config(page_title="Car Price Prediction App", page_icon="🚗", layout="centered")
