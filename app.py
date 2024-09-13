@@ -66,7 +66,7 @@ if st.sidebar.button('Predict Price'):
             <p style="font-size:18px;text-align:center;">
                 Based on the details you provided, the <strong>estimated selling price</strong> of the car is:
             </p>
-            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:1} lakhs</h2>
+            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price_in_lakhs:1f} lakhs</h2>
         </div>
     """, unsafe_allow_html=True)
 
