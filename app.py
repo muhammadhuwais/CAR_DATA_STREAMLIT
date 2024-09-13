@@ -55,15 +55,20 @@ scaled_features = scaler.transform(features)
 # Predict the price and display the result with styled output
 if st.sidebar.button('Predict Price'):
     predicted_price = model.predict(scaled_features)
+    
+    # Handle negative predictions
+    predicted_price = max(predicted_price[0], 0)  # Set to 0 if negative
+
     st.markdown(f"""
         <div style="background-color:#f0f2f6;padding:20px;border-radius:10px;margin-top:20px;">
             <h3 style="color:#4CAF50;text-align:center;">Prediction Result</h3>
             <p style="font-size:18px;text-align:center;">
                 Based on the details you provided, the <strong>estimated selling price</strong> of the car is:
             </p>
-            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price[0]:.2f} lakhs</h2>
+            <h2 style="color:#4CAF50;text-align:center;">₹{predicted_price:.2f} lakhs</h2>
         </div>
     """, unsafe_allow_html=True)
+
 
 # Footer with some styling
 st.markdown("""
