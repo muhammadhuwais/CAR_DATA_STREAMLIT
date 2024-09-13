@@ -2,15 +2,9 @@ import streamlit as st
 import pickle
 import numpy as np
 
-# Load the machine learning model
-model_filename = 'model.pkl'
-with open(model_filename, 'rb') as file:
-    model = pickle.load(file)
-
-# Load the machine learning model
-model_filename = 'scaler.pkl'
-with open(model_filename, 'rb') as file:
-    model = pickle.load(file)
+# Load the trained model and scaler
+model = pickle.load(open(r'model.pkl', 'rb'))
+scaler = pickle.load(open(r'scaler.pkl', 'rb'))
 
 # App title and description with HTML
 st.set_page_config(page_title="Car Price Prediction App", page_icon="🚗", layout="centered")
